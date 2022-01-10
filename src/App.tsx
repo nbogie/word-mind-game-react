@@ -1,12 +1,12 @@
 import React from 'react';
-import WordleGame from './WordleGame';
+import WordMindGame from './WordMindGame';
 
 function App() {
 
 
   return (
     <div className="App">
-      <WordleGame />
+      <WordMindGame />
     </div>
   );
 }

@@ -1,14 +1,14 @@
-import React, { SetStateAction, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { GuessView } from './GuessView';
 import { Guess } from './types';
-import { inputs, isInBiggerWordList, randomWord } from './wordList';
+import { isInBiggerWordList, randomWord } from './wordList';
 
-function WordleGame() {
+function WordMindGame() {
     const maxGuesses = 6;
     const [wordToGuess,] = useState(randomWord());
 
     const [currentGuess, setCurrentGuess] = useState('');
-    const [previousGuesses, setPreviousGuesses] = useState<Guess[]>([]);
+    const [previousGuesses,] = useState<Guess[]>([]);
 
     function lastGuess() {
         return previousGuesses.length === 0 ? null : previousGuesses[previousGuesses.length - 1];
@@ -42,15 +42,15 @@ function WordleGame() {
     }
 
     const handleAnswerChange = useCallback(function (key: string) {
-        console.log({ key });
-
         if (key === 'Enter') {
             handleSubmit();
+            return;
         }
         // You don't get a key of Backspace with 'keypress' event, 
         // unlike with 'keydown'
         if (key === 'Backspace') {
             handleBack();
+            return;
         }
         if (key) {
             const upcased = key.toUpperCase();
@@ -74,20 +74,17 @@ function WordleGame() {
 
     return (
 
-        <div className='wordleGame'>
+        <div className='wordMindGame'>
             <h2>A game like Wordle</h2>
             {playerWon() && <h3>You win!</h3>}
             {
                 !isGameOver &&
                 <>
                     <div className='controls'>
-                        {/* <input
-                        value={letter}
-                        onChange={e => handleLetterTyped(e.target.value)}
-                    /> */}
+
                         <button onClick={handleClear} >Clear</button>
                         <button onClick={handleBack} >Back</button>
-                        <button disabled={isGameOver} onClick={handleSubmit} >Submit</button>
+                        <button onClick={handleSubmit} >Submit</button>
                         <br />
                     </div>
                     <div className='guessRow'>
@@ -111,4 +108,4 @@ function WordleGame() {
         </div >
     )
 }
-export default WordleGame;
+export default WordMindGame;

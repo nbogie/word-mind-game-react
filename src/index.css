@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 
 code {
@@ -13,4 +15,42 @@ code {
 }
 .App {
   text-align: center;
+}
+
+.guessRow {
+  display: flex;
+  flex-wrap: row;
+}
+
+.wordleGame {
+  margin: 0 auto;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scoredLetter,
+.unscoredLetter {
+  font-size: 3rem;
+  padding: 10px;
+  margin: 10px;
+  width: 60px;
+  height: 60px;
+}
+
+.unscoredLetter {
+  border: 2px solid black;
+}
+
+.scoredLetter.placed {
+  background: green;
+}
+
+.scoredLetter.partial {
+  background: yellow;
+}
+
+.scoredLetter.notInWord {
+  background: gainsboro;
 }

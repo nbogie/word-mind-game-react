@@ -1,5 +1,5 @@
 import { ScoredLetterView } from "./ScoredLetter";
-import { Guess } from "./types";
+import { Guess } from "../types";
 
 interface GuessViewProps {
     guess: Guess;

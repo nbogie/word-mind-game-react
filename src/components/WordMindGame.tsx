@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { GuessView } from './GuessView';
-import { Guess } from './types';
-import { isInBiggerWordList, randomWord } from './wordList';
+import { Guess } from '../types';
+import { randomWord } from './wordList';
 
 function WordMindGame() {
     const maxGuesses = 6;
@@ -25,21 +25,21 @@ function WordMindGame() {
         setCurrentGuess(prev => prev.length === 0 ? prev : prev.slice(0, prev.length - 1));
     }
 
-    function handleSubmit() {
+    const handleSubmit = useCallback(() => {
         if (currentGuess.length !== 5) {
             return;
         }
-        if (!isInBiggerWordList(currentGuess)) {
-            console.log('unrecognised word: ', currentGuess);
-            //TODO: tell user unrecognised word
-            return;
-        }
+        // if (!isInBiggerWordList(currentGuess)) {
+        //     console.log('Unrecognised word: ', currentGuess);
+        //     //TODO: tell user unrecognised word
+        //     return;
+        // }
         if (previousGuesses.length < maxGuesses) {
-            previousGuesses.push([...currentGuess.split('')].join(''));
+            previousGuesses.push(currentGuess);
             setCurrentGuess("");
 
         }
-    }
+    }, [currentGuess, previousGuesses])
 
     const handleAnswerChange = useCallback(function (key: string) {
         if (key === 'Enter') {
@@ -60,7 +60,7 @@ function WordMindGame() {
                 }
             }
         }
-    }, [currentGuess]);
+    }, [currentGuess, handleSubmit]);
 
     useEffect(() => {
         const listener = (e: any) => handleAnswerChange(e.key);

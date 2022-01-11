@@ -75,13 +75,12 @@ function WordMindGame() {
     return (
 
         <div className='wordMindGame'>
-            <h2>A game like Wordle</h2>
+            <h2>A copy of Wordle - made with React</h2>
             {playerWon() && <h3>You win!</h3>}
             {
                 !isGameOver &&
                 <>
                     <div className='controls'>
-
                         <button onClick={handleClear} >Clear</button>
                         <button onClick={handleBack} >Back</button>
                         <button onClick={handleSubmit} >Submit</button>
@@ -102,8 +101,16 @@ function WordMindGame() {
                     key={ix}
                 />)}
             </div>
-            <p>The real Wordle can be found at<br />
+            <h3>Controls</h3>
+            <p>Type letters to add to guess<br />
+                Type 'Enter' to submit a guess<br />
+                Type backspace to remove a character</p>
+
+            <h3>About Wordle</h3>
+            <p>The real Wordle is better and can be found at<br />
                 <a href='https://www.powerlanguage.co.uk/wordle/'>https://www.powerlanguage.co.uk/wordle/</a>
+                <br />
+                The version here is just for study purposes.
             </p>
         </div >
     )

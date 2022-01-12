@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { GuessView } from './GuessView';
+import { GuessView, PlaceholderGuessView } from './GuessView';
 import { Guess, LetterStates } from '../types';
 import { randomWord } from './wordList';
 import Keyboard from './Keyboard';
@@ -75,6 +75,7 @@ function WordMindGame() {
         return () => window.removeEventListener('keydown', listener);
     }, [handleLetterEntry]);
 
+    const placeholderGuesses: null[] = isGameOver ? [] : [null, null, null, null, null, null].slice(0, turnsRemaining);
     return (
 
         <div className='wordMindGame'>
@@ -95,22 +96,25 @@ function WordMindGame() {
                     Turns remaining: {turnsRemaining}
                 </>
             }
-            <br />
-            Prev guesses:
+
             <div className={'previousGuesses'}>
                 {previousGuesses.map((guess, ix) => <GuessView
                     guess={guess}
                     target={wordToGuess}
                     key={ix}
                 />)}
+                {placeholderGuesses.map((junk, ix) => <PlaceholderGuessView
+                    key={ix}
+                />)}
             </div>
             <Keyboard
                 letterStates={letterStates}
                 handleLetterEntry={handleLetterEntry} />
-            <h3>Controls</h3>
+            <h3>Keyboard Controls</h3>
             <p>Type letters to add to guess<br />
                 Type 'Enter' to submit a guess<br />
-                Type backspace to remove a character</p>
+                Type backspace to remove a character
+            </p>
 
             <h3>About Wordle</h3>
             <p>The real Wordle is better and can be found at<br />

@@ -1,4 +1,4 @@
-import { ScoredLetterView } from "./ScoredLetter";
+import { PlaceholderLetterView, ScoredLetterView } from "./ScoredLetter";
 import { Guess } from "../types";
 import { scoreGuess } from "../scoring";
 
@@ -15,6 +15,19 @@ export function GuessView(props: GuessViewProps) {
             {cells.map((scoredLetter, ix) => <ScoredLetterView
                 scoredLetter={scoredLetter}
                 key={ix} />)}
+        </div>
+    );
+}
+
+export function PlaceholderGuessView() {
+    const cells = new Array(5).fill('x');
+
+    return (
+        <div className='guessRow placeholderRow'>
+            {cells.map((junk, ix) => (
+                <PlaceholderLetterView
+                    key={ix} />)
+            )}
         </div>
     );
 }

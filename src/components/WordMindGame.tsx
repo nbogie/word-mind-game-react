@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { GuessView } from './GuessView';
-import { Guess } from '../types';
+import { Guess, LetterStates } from '../types';
 import { randomWord } from './wordList';
+import Keyboard from './Keyboard';
 
 function WordMindGame() {
     const maxGuesses = 6;
@@ -17,6 +18,7 @@ function WordMindGame() {
     const playerWon = () => lastGuess() === wordToGuess;
     const isGameOver = previousGuesses.length >= maxGuesses || playerWon();
 
+    const letterStates = calcLetterStates(previousGuesses, wordToGuess);
     function handleClear() {
         setCurrentGuess("");
     }
@@ -41,7 +43,7 @@ function WordMindGame() {
         }
     }, [currentGuess, previousGuesses])
 
-    const handleAnswerChange = useCallback(function (key: string) {
+    const handleLetterEntry = useCallback(function (key: string) {
         if (key === 'Enter') {
             handleSubmit();
             return;
@@ -63,14 +65,15 @@ function WordMindGame() {
     }, [currentGuess, handleSubmit]);
 
     useEffect(() => {
-        const listener = (e: any) => handleAnswerChange(e.key);
+        const listener = (e: any) => handleLetterEntry(e.key);
+
         function registerKeyListener() {
             window.addEventListener('keydown', listener);
         }
         registerKeyListener();
 
         return () => window.removeEventListener('keydown', listener);
-    }, [handleAnswerChange]);
+    }, [handleLetterEntry]);
 
     return (
 
@@ -101,6 +104,9 @@ function WordMindGame() {
                     key={ix}
                 />)}
             </div>
+            <Keyboard
+                letterStates={letterStates}
+                handleLetterEntry={handleLetterEntry} />
             <h3>Controls</h3>
             <p>Type letters to add to guess<br />
                 Type 'Enter' to submit a guess<br />
@@ -116,3 +122,17 @@ function WordMindGame() {
     )
 }
 export default WordMindGame;
+
+function calcLetterStates(prevGuesses: string[], target: string) {
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const entries = alphabet.map(a => [a, 'untried']);
+    const letterStates: LetterStates = Object.fromEntries(entries);
+    const triedLetters = prevGuesses.join('');
+
+    for (const letter of triedLetters) {
+        letterStates[letter] = target.includes(letter) ? 'found' : 'absent';
+    }
+
+
+    return letterStates;
+}

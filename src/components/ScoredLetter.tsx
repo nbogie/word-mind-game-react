@@ -1,4 +1,4 @@
-import { ScoredLetter, ScoreCategory } from "./GuessView";
+import { ScoreCategory, ScoredLetter } from "../scoring";
 
 export interface ScoredLetterProps {
     scoredLetter: ScoredLetter;

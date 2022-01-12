@@ -54,3 +54,38 @@ code {
 .scoredLetter.notInWord {
   background: gainsboro;
 }
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.keyboardRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 2px;
+}
+
+.keyboardKey {
+  margin: 0px 1px;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  background: gainsboro;
+  cursor: pointer;
+  border-radius: 3px;
+  border: none;
+}
+
+.keyboardKey.untried {
+  background: gainsboro;
+}
+.keyboardKey.found {
+  background: green;
+  color: white;
+}
+.keyboardKey.absent {
+  background: slategray;
+  color: white;
+}

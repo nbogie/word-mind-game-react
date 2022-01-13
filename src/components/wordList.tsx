@@ -59,6 +59,7 @@ export const inputs: string[] = [
     "AWAKE",
     "BASIC",
     "BASIN",
+    "BATCH",
     "BEARD",
     "BEAST",
     "BEGIN",
@@ -340,6 +341,7 @@ export const inputs: string[] = [
     "LANCE",
     "LARGE",
     "LARVA",
+    "LATCH",
     "LATHE",
     "LATIN",
     "LAUGH",
@@ -725,6 +727,7 @@ export const inputs: string[] = [
     "WRECK",
     "WRITE",
     "WRONG",
+    "YACHT",
     "YIELD",
     "YOUNG",
     "YOUTH"

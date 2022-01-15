@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+There is a separate branch, `with-anim` with animation (framer motion) - I don't want the main branch to be hard to read for React newcomers.
+
+
+
+# Create React App -  Boilerplate docs...
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

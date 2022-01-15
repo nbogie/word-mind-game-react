@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { GuessView, PlaceholderGuessView } from './GuessView';
 import { Guess, LetterState, LetterStates } from '../types';
+import { GuessRow, PlaceholderGuessRow } from './GuessRow';
 import { randomWord } from './wordList';
 import Keyboard, { KeyboardKey } from './Keyboard';
 import { ScoreCategory, ScoredLetter, scoreGuess } from '../scoring';
@@ -120,21 +120,22 @@ function WordMindGame() {
     }
 
     return (
-
         <div className='wordMindGame'>
 
             {playerWon() && <><h3>You win!</h3><NewGameButton /></>}
 
             <div className={'guessRows'}>
                 {previousGuesses.map((guess, ix) => (
-                    <GuessView
+                    <GuessRow
                         guess={guess}
                         target={wordToGuess}
                         key={ix}
                     />
                 ))}
+
                 {!isGameOver && <CurrentRow currentGuess={currentGuess} />}
-                {placeholderGuesses.map((junk, ix) => <PlaceholderGuessView
+
+                {placeholderGuesses.map((junk, ix) => <PlaceholderGuessRow
                     key={ix}
                 />)}
 
@@ -145,8 +146,8 @@ function WordMindGame() {
                     <NewGameButton />
                 </>
                 }
-
-            </div>
+            </div
+            >
             <Keyboard
                 letterStates={letterStates}
                 handleLetterEntry={handleLetterEntry} />

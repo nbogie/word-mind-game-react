@@ -2,12 +2,12 @@ import { PlaceholderLetterView, ScoredLetterView } from "./ScoredLetter";
 import { Guess } from "../types";
 import { scoreGuess } from "../scoring";
 
-interface GuessViewProps {
+interface GuessRowProps {
     guess: Guess;
     target: string;
 }
 
-export function GuessView(props: GuessViewProps) {
+export function GuessRow(props: GuessRowProps) {
     const cells = scoreGuess(props.guess, props.target);
 
     return (
@@ -19,7 +19,7 @@ export function GuessView(props: GuessViewProps) {
     );
 }
 
-export function PlaceholderGuessView() {
+export function PlaceholderGuessRow() {
     const cells = new Array(5).fill('x');
 
     return (

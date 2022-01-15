@@ -39,7 +39,7 @@ export default function Keyboard(props: KeyboardProps) {
                     key={ix}>
                     {keysForRow.map(k => (
                         <button
-                            className={'keyboardKey ' + (k.type === 'letter' ? props.letterStates[k.letter] : '')}
+                            className={'keyboardKey ' + (k.type === 'letter' ? props.letterStates[k.letter] : 'special')}
                             key={k.type === 'letter' ? k.letter : k.display}
                             onClick={(ev) => props.handleLetterEntry(k)}>
                             {keyToString(k)}

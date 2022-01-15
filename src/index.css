@@ -93,6 +93,12 @@ code {
   background: gainsboro;
   color: black;
 }
+
+.keyboardKey.special {
+  color: black;
+  font-size: 1rem;
+}
+
 .keyboard {
   display: flex;
   flex-direction: column;

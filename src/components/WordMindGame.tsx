@@ -26,10 +26,6 @@ function WordMindGame() {
 
     const letterStates = calcLetterStates(previousGuesses, wordToGuess);
 
-    function handleClear() {
-        setCurrentGuess("");
-    }
-
     function handleBack() {
         setCurrentGuess(prev => prev.length === 0 ? prev : prev.slice(0, prev.length - 1));
     }

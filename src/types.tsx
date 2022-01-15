@@ -1,3 +1,5 @@
 export type Guess = string;
-type LetterState = 'untried' | 'found' | 'absent';
-export type LetterStates = { [key: string]: LetterState };
+export type LetterState = 'placed' | 'partial' | 'notInWord' | 'untried';
+
+export type LetterStates = Record<string, LetterState>
+

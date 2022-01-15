@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { GuessView, PlaceholderGuessView } from './GuessView';
-import { Guess, LetterStates } from '../types';
+import { Guess, LetterState, LetterStates } from '../types';
 import { randomWord } from './wordList';
 import Keyboard from './Keyboard';
+import { ScoreCategory, ScoredLetter, scoreGuess } from '../scoring';
 
 function WordMindGame() {
     const maxGuesses = 6;
@@ -19,6 +20,7 @@ function WordMindGame() {
     const isGameOver = previousGuesses.length >= maxGuesses || playerWon();
 
     const letterStates = calcLetterStates(previousGuesses, wordToGuess);
+
     function handleClear() {
         setCurrentGuess("");
     }
@@ -127,16 +129,24 @@ function WordMindGame() {
 }
 export default WordMindGame;
 
-function calcLetterStates(prevGuesses: string[], target: string) {
+function calcLetterStates(prevGuesses: string[], target: string): LetterStates {
+
+    function findBestScoreForLetter(letter: string, allScores: ScoredLetter[]): ScoreCategory {
+        const scoresForLetter = allScores.filter((s: ScoredLetter) => s.letter === letter);
+        scoresForLetter.sort().reverse();
+        const bestScore: ScoreCategory = scoresForLetter[0]?.score;
+        return bestScore;
+    }
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    const entries = alphabet.map(a => [a, 'untried']);
+    const entries: [string, LetterState][] = alphabet.map(a => [a, 'untried']);
     const letterStates: LetterStates = Object.fromEntries(entries);
+    const scorings: ScoredLetter[] = prevGuesses.flatMap(guess => scoreGuess(guess, target));
+
     const triedLetters = prevGuesses.join('');
 
     for (const letter of triedLetters) {
-        letterStates[letter] = target.includes(letter) ? 'found' : 'absent';
+        const best = findBestScoreForLetter(letter, scorings);
+        letterStates[letter] = best;
     }
-
-
     return letterStates;
 }

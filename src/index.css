@@ -63,18 +63,35 @@ code {
 .scoredLetter {
   color: white;
 }
-.scoredLetter.placed {
+
+.keyboardKey {
+  margin: 0px 1px;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  background: gainsboro;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+  border: none;
+}
+
+.placed {
   background: green;
 }
 
-.scoredLetter.partial {
+.partial {
   background: rgba(204, 180, 47, 0.938);
 }
 
-.scoredLetter.notInWord {
+.notInWord {
   background: darkslategray;
 }
 
+.untried {
+  background: gainsboro;
+  color: black;
+}
 .keyboard {
   display: flex;
   flex-direction: column;
@@ -85,27 +102,4 @@ code {
   flex-direction: row;
   justify-content: center;
   padding-bottom: 2px;
-}
-
-.keyboardKey {
-  margin: 0px 1px;
-  width: 3rem;
-  height: 3rem;
-  font-size: 1.5rem;
-  background: gainsboro;
-  cursor: pointer;
-  border-radius: 3px;
-  border: none;
-}
-
-.keyboardKey.untried {
-  background: gainsboro;
-}
-.keyboardKey.found {
-  background: green;
-  color: white;
-}
-.keyboardKey.absent {
-  background: slategray;
-  color: white;
 }

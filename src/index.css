@@ -22,7 +22,7 @@ code {
 }
 
 .guessRows {
-  margin-bottom: 80px;
+  margin-bottom: 40px;
 }
 
 .guessRow {
@@ -111,6 +111,7 @@ code {
   padding-bottom: 2px;
 }
 
-button {
+button.newGame {
   height: 60px;
+  margin: 3px;
 }

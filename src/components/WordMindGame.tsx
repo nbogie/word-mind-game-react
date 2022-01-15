@@ -83,12 +83,13 @@ function WordMindGame() {
     const placeholderGuesses: null[] = isGameOver ? [] : [null, null, null, null, null].slice(0, turnsRemaining - 1);
 
     function NewGameButton() {
-        return <button className='newGame' onClick={resetGameWithNewWord}>New Game</button>
+        return <button className='newGame' onClick={resetGameWithNewWord}>
+            New Game
+        </button>
     }
     return (
 
         <div className='wordMindGame'>
-            <h2>A copy of Wordle - made with React</h2>
 
             {playerWon() && <><h3>You win!</h3><NewGameButton /></>}
 
@@ -123,11 +124,11 @@ function WordMindGame() {
                 letterStates={letterStates}
                 handleLetterEntry={handleLetterEntry} />
 
-            <h3>About the real Wordle</h3>
+            <h3>This is not the real Wordle</h3>
             <p>The real Wordle is better and can be found at<br />
                 <a href='https://www.powerlanguage.co.uk/wordle/'>https://www.powerlanguage.co.uk/wordle/</a>
                 <br />
-                The version here is just for study purposes, though it does let you play multiple times per day!
+                The version here is just for a programming study, though it does let you play multiple times per day!
             </p>
         </div >
     )

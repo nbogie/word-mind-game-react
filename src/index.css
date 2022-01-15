@@ -21,9 +21,10 @@ code {
   text-align: center;
 }
 
-.previousGuesses {
-  margin-bottom: 100px;
+.guessRows {
+  margin-bottom: 80px;
 }
+
 .guessRow {
   display: flex;
   flex-wrap: row;

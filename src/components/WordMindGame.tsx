@@ -77,37 +77,49 @@ function WordMindGame() {
         return () => window.removeEventListener('keydown', listener);
     }, [handleLetterEntry]);
 
-    const placeholderGuesses: null[] = isGameOver ? [] : [null, null, null, null, null, null].slice(0, turnsRemaining);
+    const placeholderGuesses: null[] = isGameOver ? [] : [null, null, null, null, null].slice(0, turnsRemaining - 1);
     return (
 
         <div className='wordMindGame'>
             <h2>A copy of Wordle - made with React</h2>
-            {playerWon() && <h3>You win!</h3>}
-            {
-                !isGameOver &&
-                <>
-                    <div className='controls'>
-                        <button onClick={handleClear} >Clear</button>
-                        <button onClick={handleBack} >Back</button>
-                        <button onClick={handleSubmit} >Submit</button>
-                        <br />
-                    </div>
-                    <div className='guessRow'>
-                        {currentGuess.split('').map((letter, ix) => <div key={ix} className='unscoredLetter'>{letter}</div>)}
-                    </div>
-                    Turns remaining: {turnsRemaining}
-                </>
-            }
 
-            <div className={'previousGuesses'}>
+            {playerWon() && <h3>You win!</h3>}
+
+            <div className={'guessRows'}>
                 {previousGuesses.map((guess, ix) => <GuessView
                     guess={guess}
                     target={wordToGuess}
                     key={ix}
                 />)}
+                {!isGameOver && <div className='guessRow'>
+                    {prepCurrentGuessForDisplay(currentGuess).map((letter, ix) => (
+                        <div key={ix} className='unscoredLetter'>{letter}</div>
+                    ))}
+                </div>}
                 {placeholderGuesses.map((junk, ix) => <PlaceholderGuessView
                     key={ix}
                 />)}
+
+                {
+                    !isGameOver &&
+                    <>
+                        <div className='controls'>
+                            <button onClick={handleClear} >Clear</button>
+                            <button onClick={handleBack} >Back</button>
+                            <button onClick={handleSubmit} >Submit</button>
+                            <br />
+                        </div>
+                    </>
+                }
+                {isGameOver && !playerWon() && <><h3>Game Over.  The word was:</h3>
+                    <div className='guessRow'>
+                        {wordToGuess.split('').map((letter, ix) => (
+                            <div key={ix} className='unscoredLetter'>{letter}</div>)
+                        )}
+                    </div>
+                </>
+                }
+
             </div>
             <Keyboard
                 letterStates={letterStates}
@@ -149,4 +161,12 @@ function calcLetterStates(prevGuesses: string[], target: string): LetterStates {
         letterStates[letter] = best;
     }
     return letterStates;
+}
+function prepCurrentGuessForDisplay(lettersSoFar: string): string[] {
+    return padWithTrailingSpaces(lettersSoFar, 5).split('');
+
+}
+
+function padWithTrailingSpaces(str: string, targetLen: number): string {
+    return str + ' '.repeat(5 - str.length);
 }

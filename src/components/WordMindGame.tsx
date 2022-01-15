@@ -4,31 +4,15 @@ import { Guess, LetterState, LetterStates } from '../types';
 import { randomWord } from './wordList';
 import Keyboard, { KeyboardKey } from './Keyboard';
 import { ScoreCategory, ScoredLetter, scoreGuess } from '../scoring';
+import { Footer } from './Footer';
+import CurrentRow from './CurrentRow';
+import RevealedRow from './RevealedRow';
 
 function WordMindGame() {
     const maxGuesses = 6;
     const [wordToGuess, setWordToGuess] = useState(randomWord());
     const [currentGuess, setCurrentGuess] = useState('');
     const [previousGuesses, setPreviousGuesses] = useState<Guess[]>([]);
-
-    function resetGameWithNewWord() {
-        setWordToGuess(randomWord());
-        setCurrentGuess('');
-        setPreviousGuesses([]);
-    }
-
-    function lastGuess() {
-        return previousGuesses.length === 0 ? null : previousGuesses[previousGuesses.length - 1];
-    }
-    const turnsRemaining = maxGuesses - previousGuesses.length;
-    const playerWon = () => lastGuess() === wordToGuess;
-    const isGameOver = previousGuesses.length >= maxGuesses || playerWon();
-
-    const letterStates = calcLetterStates(previousGuesses, wordToGuess);
-
-    function handleBack() {
-        setCurrentGuess(prev => prev.length === 0 ? prev : prev.slice(0, prev.length - 1));
-    }
 
     const handleSubmit = useCallback(() => {
         if (currentGuess.length !== 5) {
@@ -45,6 +29,7 @@ function WordMindGame() {
 
         }
     }, [currentGuess, previousGuesses])
+
 
     const handleLetterEntry = useCallback(function (key: KeyboardKey) {
         if (key.type === 'special' && key.effect === 'Enter') {
@@ -66,6 +51,8 @@ function WordMindGame() {
 
     }, [currentGuess, handleSubmit]);
 
+
+
     useEffect(() => {
         const listener = (e: KeyboardEvent) => (e.key === 'Enter' || e.key === 'Backspace') ?
             handleLetterEntry({ type: 'special', display: e.key, effect: e.key }) :
@@ -80,13 +67,58 @@ function WordMindGame() {
         return () => window.removeEventListener('keydown', listener);
     }, [handleLetterEntry]);
 
+    function resetGameWithNewWord() {
+        setWordToGuess(randomWord());
+        setCurrentGuess('');
+        setPreviousGuesses([]);
+    }
+
+    function lastGuess() {
+        return previousGuesses.length === 0 ? null : previousGuesses[previousGuesses.length - 1];
+    }
+
+
+    function calcLetterStates(prevGuesses: string[], target: string): LetterStates {
+
+        function findBestScoreForLetter(letter: string, allScores: ScoredLetter[]): ScoreCategory {
+            const scoresForLetter = allScores.filter((s: ScoredLetter) => s.letter === letter);
+            scoresForLetter.sort().reverse();
+            const bestScore: ScoreCategory = scoresForLetter[0]?.score;
+            return bestScore;
+        }
+        const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const entries: [string, LetterState][] = alphabet.map(a => [a, 'untried']);
+        const letterStates: LetterStates = Object.fromEntries(entries);
+        const scorings: ScoredLetter[] = prevGuesses.flatMap(guess => scoreGuess(guess, target));
+
+        const triedLetters = prevGuesses.join('');
+
+        for (const letter of triedLetters) {
+            const best = findBestScoreForLetter(letter, scorings);
+            letterStates[letter] = best;
+        }
+        return letterStates;
+    }
+
+    function handleBack() {
+        setCurrentGuess(prev => prev.length === 0 ? prev : prev.slice(0, prev.length - 1));
+    }
+
+
+    const turnsRemaining = maxGuesses - previousGuesses.length;
+    const playerWon = () => lastGuess() === wordToGuess;
+    const isGameOver = previousGuesses.length >= maxGuesses || playerWon();
+    const letterStates = calcLetterStates(previousGuesses, wordToGuess);
     const placeholderGuesses: null[] = isGameOver ? [] : [null, null, null, null, null].slice(0, turnsRemaining - 1);
 
     function NewGameButton() {
-        return <button className='newGame' onClick={resetGameWithNewWord}>
-            New Game
-        </button>
+        return (
+            <button className='newGame' onClick={resetGameWithNewWord}>
+                New Game
+            </button>
+        )
     }
+
     return (
 
         <div className='wordMindGame'>
@@ -94,26 +126,21 @@ function WordMindGame() {
             {playerWon() && <><h3>You win!</h3><NewGameButton /></>}
 
             <div className={'guessRows'}>
-                {previousGuesses.map((guess, ix) => <GuessView
-                    guess={guess}
-                    target={wordToGuess}
-                    key={ix}
-                />)}
-                {!isGameOver && <div className='guessRow'>
-                    {prepCurrentGuessForDisplay(currentGuess).map((letter, ix) => (
-                        <div key={ix} className='unscoredLetter'>{letter}</div>
-                    ))}
-                </div>}
+                {previousGuesses.map((guess, ix) => (
+                    <GuessView
+                        guess={guess}
+                        target={wordToGuess}
+                        key={ix}
+                    />
+                ))}
+                {!isGameOver && <CurrentRow currentGuess={currentGuess} />}
                 {placeholderGuesses.map((junk, ix) => <PlaceholderGuessView
                     key={ix}
                 />)}
 
-                {isGameOver && !playerWon() && <><h3>Game Over.  The word was:</h3>
-                    <div className='guessRow'>
-                        {wordToGuess.split('').map((letter, ix) => (
-                            <div key={ix} className='unscoredLetter'>{letter}</div>)
-                        )}
-                    </div>
+                {isGameOver && !playerWon() && <>
+                    <h3>Game Over.  The word was:</h3>
+                    <RevealedRow wordToGuess={wordToGuess} />
                     <br />
                     <NewGameButton />
                 </>
@@ -123,44 +150,8 @@ function WordMindGame() {
             <Keyboard
                 letterStates={letterStates}
                 handleLetterEntry={handleLetterEntry} />
-
-            <h3>This is not the real Wordle</h3>
-            <p>The real Wordle is better and can be found at<br />
-                <a href='https://www.powerlanguage.co.uk/wordle/'>https://www.powerlanguage.co.uk/wordle/</a>
-                <br />
-                The version here is just for a programming study, though it does let you play multiple times per day!
-            </p>
+            <Footer />
         </div >
     )
 }
 export default WordMindGame;
-
-function calcLetterStates(prevGuesses: string[], target: string): LetterStates {
-
-    function findBestScoreForLetter(letter: string, allScores: ScoredLetter[]): ScoreCategory {
-        const scoresForLetter = allScores.filter((s: ScoredLetter) => s.letter === letter);
-        scoresForLetter.sort().reverse();
-        const bestScore: ScoreCategory = scoresForLetter[0]?.score;
-        return bestScore;
-    }
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    const entries: [string, LetterState][] = alphabet.map(a => [a, 'untried']);
-    const letterStates: LetterStates = Object.fromEntries(entries);
-    const scorings: ScoredLetter[] = prevGuesses.flatMap(guess => scoreGuess(guess, target));
-
-    const triedLetters = prevGuesses.join('');
-
-    for (const letter of triedLetters) {
-        const best = findBestScoreForLetter(letter, scorings);
-        letterStates[letter] = best;
-    }
-    return letterStates;
-}
-function prepCurrentGuessForDisplay(lettersSoFar: string): string[] {
-    return padWithTrailingSpaces(lettersSoFar, 5).split('');
-
-}
-
-function padWithTrailingSpaces(str: string, targetLen: number): string {
-    return str + ' '.repeat(5 - str.length);
-}

@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders heading', () => {
   render(<App />);
-  const linkElement = screen.getByText(/copy of Wordle/i);
+  const linkElement = screen.getByText(/not the real Wordle/i);
   expect(linkElement).toBeInTheDocument();
 });

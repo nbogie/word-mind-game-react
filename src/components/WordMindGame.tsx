@@ -128,7 +128,7 @@ function WordMindGame() {
 
     return (
         <div className='wordMindGame'>
-
+            <h3>Not Wordle</h3>
             {playerWon() && <><h3>You win!</h3><NewGameButton /></>}
 
             <div className={'guessRows'}>

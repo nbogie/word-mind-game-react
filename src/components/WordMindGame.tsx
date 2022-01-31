@@ -119,6 +119,13 @@ function WordMindGame() {
         )
     }
 
+    function RowsRemainingAdvice(props: any) {
+        let text = (props.turnsRemaining === 1) ?
+            "Last guess!" :
+            props.turnsRemaining + " guesses remaining.";
+        return <div className='rowsRemainingAdvice'>{text}</div>
+    }
+
     return (
         <div className='wordMindGame'>
 
@@ -138,6 +145,8 @@ function WordMindGame() {
                 {placeholderGuesses.map((junk, ix) => <PlaceholderGuessRow
                     key={ix}
                 />)}
+
+                {!isGameOver && <RowsRemainingAdvice turnsRemaining={turnsRemaining} />}
 
                 {isGameOver && !playerWon() && <>
                     <h3>Game Over.  The word was:</h3>

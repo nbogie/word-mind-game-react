@@ -30,6 +30,17 @@ code {
   flex-wrap: row;
 }
 
+@media only screen and (max-width: 320px) {
+  .placeholderRow {
+    display: none;
+  }
+}
+@media only screen and (min-width: 321px) {
+  .rowsRemainingAdvice {
+    display: none;
+  }
+}
+
 .wordMindGame {
   margin: 0 auto;
   max-width: 800px;

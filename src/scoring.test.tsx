@@ -37,6 +37,11 @@ it("prioritises later green when processing first of a double letter in input",
         checkScoring('LADLE', '01022', 'STALE');
     }
 );
+it("should mark a single guessed letter correctly that occurs twice in the target",
+    () => {
+        checkScoring("TREAT", "00202", "EJECT")
+    }
+);
 
 it("should mark a matching word correctly",
     () => {

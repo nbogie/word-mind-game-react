@@ -18,14 +18,15 @@ export function scoreGuess(guess: Guess, target: string): ScoredLetter[] {
         score?: ScoreCategory;
     }
     //sweep 1: account for any greens first:
-    //    for each letter guess-target pair that perfectly match
-    //        mark the target letter tile as accounted for
-    //        mark the guess letter tile as accounted for
-    //sweep 2: deal with any yellows.
-    //    for each GUESS_TILE of remaining tiles in guess
+    //    for each (GUESS_TILE, TARGET_TILE) pair that perfectly match
+    //        mark (score) the GUESS_TILE as green
+    //        mark the TARGET_TILE as accounted for
+    
+    //sweep 2: deal with any yellows:       
+    //    for each GUESS_TILE of remaining (unscored) tiles in guess
     //        if GUESS_TILE letter is in remaining unaccounted-for tiles in TARGET
-    //        mark GUESS_TILE yellow
-    //        mark TARGET_TILE accounted for    
+    //        mark (score) GUESS_TILE as yellow
+    //        mark TARGET_TILE as accounted for    
 
     const guessTiles: MaybeScoredLetter[] = guess.split('').map(ch => ({ letter: ch }))
     const targetTiles: TargetTileBeingMarked[] = target.split('').map(ch => ({ letter: ch, isAccountedFor: false }))
